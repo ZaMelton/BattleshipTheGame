@@ -9,9 +9,11 @@ namespace BattleshipGame
     class Board
     {
         public string[,] board;
-        Carrier carrier;
-        Destroyer destroyer;
-        Battleship battleship;
+        List<Ship> shipList;
+        Submarine sub;
+        Battleship bb;
+        Carrier cv;
+        Destroyer dd;
 
 
         public Board()
@@ -29,98 +31,100 @@ namespace BattleshipGame
 
         public void ChooseBoardPositions(string[,] board)
         {
-            /////////////////////////////////////////////Placing of ships test work///////////////////////////////////////////////////////////////
-            //for (int i = 0; i < 4; i++)
-            //{
+            //Create ships and add to list....... Will probably change location these are instantiated later///////////////
+            Submarine sub = new Submarine();
+            Battleship bb = new Battleship();
+            Carrier cv = new Carrier();
+            Destroyer dd = new Destroyer();
 
-            int lengthOfShip = 4;
-            Console.WriteLine($"Please choose a start point for your Battleship");
-            string userChoiceRow = Console.ReadLine();
-            Console.WriteLine($"Please choose column for your BB");
-            int userBoardChoiceColumn = Int32.Parse(Console.ReadLine());
+            shipList = new List<Ship>();
+            shipList.Add(sub);
+            shipList.Add(bb);
+            shipList.Add(cv);
+            shipList.Add(dd);
+            /////////////////////////////////////////////////////////////////
 
-            int userChoiceRowInt = DetermineRow(userChoiceRow);
-
-            board[userChoiceRowInt, (userBoardChoiceColumn - 1)] = "B";
-            //}
-
-            Console.WriteLine("Do you want the ship to continue left, right, up or down of that position?");
-            string shipDirection = Console.ReadLine().ToLower();
-
-            if (shipDirection == "up")
+            foreach (Ship ship in shipList)
             {
-                if (lengthOfShip > (userChoiceRowInt + 1))
+                Console.WriteLine($"Please choose a start point for your {ship.name}");
+                string userChoiceRow = Console.ReadLine();
+                Console.WriteLine($"Please choose column for your {ship.name}");
+                int userBoardChoiceColumn = Int32.Parse(Console.ReadLine());
+
+                int userChoiceRowInt = DetermineRow(userChoiceRow);
+
+                board[userChoiceRowInt, (userBoardChoiceColumn - 1)] = ship.firstLetter;
+
+
+                Console.WriteLine("Do you want the ship to continue left, right, up or down of that position?");
+                string shipDirection = Console.ReadLine().ToLower();
+
+                if (shipDirection == "up")
                 {
-                    Console.WriteLine("You can't place continue your ship up from that position, please try another position.");
-                }
-                else
-                {
-                    for (int i = 1; i < lengthOfShip; i++)
+                    if (ship.lengthOfShip > (userChoiceRowInt + 1))
                     {
-                        board[(userChoiceRowInt - i), (userBoardChoiceColumn - 1)] = "B";
+                        Console.WriteLine("You can't place continue your ship up from that position, please try another position.");
+                    }
+                    else
+                    {
+                        for (int i = 1; i < ship.lengthOfShip; i++)
+                        {
+                            board[(userChoiceRowInt - i), (userBoardChoiceColumn - 1)] = ship.firstLetter;
+                        }
+                        DisplayBoard();
+                    }
+                }
+                else if (shipDirection == "down")
+                {
+                    if (((userChoiceRowInt) + ship.lengthOfShip) > board.GetLength(0))
+                    {
+                        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                    }
+                    else
+                    {
+                        for (int i = 1; i < ship.lengthOfShip; i++)
+                        {
+                            board[(userChoiceRowInt + i), (userBoardChoiceColumn - 1)] = ship.firstLetter;
+                        }
+                        DisplayBoard();
+                    }
+                }
+                else if (shipDirection == "left")
+                {
+                    if (ship.lengthOfShip > (userBoardChoiceColumn))
+                    {
+                        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                    }
+                    else
+                    {
+                        for (int i = 1; i < ship.lengthOfShip; i++)
+                        {
+                            board[(userChoiceRowInt), (userBoardChoiceColumn - 1) - i] = ship.firstLetter;
+                        }
+                        DisplayBoard();
+                    }
+
+                }
+                else if (shipDirection == "right")
+                {
+                    if (((userBoardChoiceColumn - 1) + ship.lengthOfShip) > board.GetLength(1))
+                    {
+                        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                    }
+                    else
+                    {
+                        for (int i = 1; i < ship.lengthOfShip; i++)
+                        {
+                            board[(userChoiceRowInt), (userBoardChoiceColumn - 1) + i] = ship.firstLetter;
+                        }
+                        DisplayBoard();
                     }
                 }
             }
-            else if (shipDirection == "down")
-            {
-                if (((userChoiceRowInt) + lengthOfShip) > board.GetLength(0))
-                {
-                    Console.WriteLine("You can't continue your ship up from that position, please try another position.");
-                }
-                else
-                {
-                    for (int i = 1; i < lengthOfShip; i++)
-                    {
-                        board[(userChoiceRowInt + i), (userBoardChoiceColumn - 1)] = "B";
-                    }
-                }
-            }
-            else if (shipDirection == "left")
-            {
-                if (lengthOfShip > (userBoardChoiceColumn))
-                {
-                    Console.WriteLine("You can't continue your ship up from that position, please try another position.");
-                }
-                else
-                {
-                    for (int i = 1; i < lengthOfShip; i++)
-                    {
-                        board[(userChoiceRowInt), (userBoardChoiceColumn - 1) - i] = "B";
-                    }
-                }
-
-            }
-            else if (shipDirection == "right")
-            {
-                if (((userBoardChoiceColumn - 1) + lengthOfShip) > board.GetLength(1))
-                {
-                    Console.WriteLine("You can't continue your ship up from that position, please try another position.");
-                }
-                else
-                {
-                    for (int i = 1; i < lengthOfShip; i++)
-                    {
-                        board[(userChoiceRowInt), (userBoardChoiceColumn - 1) + i] = "B";
-                    }
-                }
-            }
-
-            ////////////////////////////////////////////////////////////////////////////////////////////
-
-            //Prints the board
-            for (int i = 0; i < board.GetLength(0); i++)
-            {
-                for (int j = 0; j < board.GetLength(1); j++)
-                {
-                    Console.Write($"[{board[i, j]}]");
-                }
-                Console.WriteLine();
-            }
-            Console.ReadLine();
         }
 
         //Lets the user input a letter for the row and turns it into an int so it can be used to index the board array
-        public static int DetermineRow(string userChoiceRow)
+        public int DetermineRow(string userChoiceRow)
         {
             int userChoiceRowInt = 0;
             int userChoiceCharNum = 97;
@@ -131,10 +135,24 @@ namespace BattleshipGame
                 if (Convert.ToChar(userChoiceRow) == userChoiceChar)
                 {
                     userChoiceRowInt = i;
+                    return userChoiceRowInt;
                 }
                 userChoiceCharNum++;
             }
             return userChoiceRowInt;
+        }
+
+        public void DisplayBoard()
+        {
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    Console.Write($"[{board[i, j]}]");
+                }
+                Console.WriteLine();
+            }
+            Console.ReadLine();
         }
     }
     

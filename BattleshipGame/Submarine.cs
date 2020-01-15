@@ -11,6 +11,8 @@ namespace BattleshipGame
         public Submarine()
         {
             lengthOfShip = 3;
+            name = "Submarine";
+            firstLetter = "S";
         }
     }
 }

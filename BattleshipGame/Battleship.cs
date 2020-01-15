@@ -11,6 +11,8 @@ namespace BattleshipGame
         public Battleship()
         {
             lengthOfShip = 4;
+            name = "Battleship";
+            firstLetter = "B";
         }
     }
 }

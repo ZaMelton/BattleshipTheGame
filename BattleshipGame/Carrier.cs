@@ -8,9 +8,12 @@ namespace BattleshipGame
 {
     class Carrier : Ship
     {
+        
         public Carrier()
         {
             lengthOfShip = 5;
+            name = "Carrier";
+            firstLetter = "C";
         }
     }
 }

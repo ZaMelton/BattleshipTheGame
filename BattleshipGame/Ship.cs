@@ -9,5 +9,7 @@ namespace BattleshipGame
     class Ship
     {
         public int lengthOfShip;
+        public string name;
+        public string firstLetter;
     }
 }

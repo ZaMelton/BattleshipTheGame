@@ -11,6 +11,8 @@ namespace BattleshipGame
         public Destroyer()
         {
             lengthOfShip = 2;
+            name = "Destroyer";
+            firstLetter = "D";
         }
     }
 }
