@@ -9,11 +9,11 @@ namespace BattleshipGame
     class Board
     {
         public string[,] board;
-        List<Ship> shipList;
-        Submarine sub;
-        Battleship bb;
-        Carrier cv;
-        Destroyer dd;
+        public List<Ship> shipList;
+        public Submarine sub;
+        public Battleship bb;
+        public Carrier cv;
+        public Destroyer dd;
 
 
         public Board()
@@ -29,20 +29,9 @@ namespace BattleshipGame
             }
         }
 
-        public void ChooseBoardPositions(string[,] board)
+        public void ChooseBoardShipPositions(string[,] board)
         {
-            //Create ships and add to list....... Will probably change location these are instantiated later///////////////
-            Submarine sub = new Submarine();
-            Battleship bb = new Battleship();
-            Carrier cv = new Carrier();
-            Destroyer dd = new Destroyer();
-
-            shipList = new List<Ship>();
-            shipList.Add(sub);
-            shipList.Add(bb);
-            shipList.Add(cv);
-            shipList.Add(dd);
-            /////////////////////////////////////////////////////////////////
+            CreateShips();
 
             foreach (Ship ship in shipList)
             {
@@ -51,7 +40,7 @@ namespace BattleshipGame
                 Console.WriteLine($"Please choose column for your {ship.name}");
                 int userBoardChoiceColumn = Int32.Parse(Console.ReadLine());
 
-                int userChoiceRowInt = DetermineRow(userChoiceRow);
+                int userChoiceRowInt = DetermineRowFromString(userChoiceRow);
 
                 board[userChoiceRowInt, (userBoardChoiceColumn - 1)] = ship.firstLetter;
 
@@ -124,20 +113,20 @@ namespace BattleshipGame
         }
 
         //Lets the user input a letter for the row and turns it into an int so it can be used to index the board array
-        public int DetermineRow(string userChoiceRow)
+        public int DetermineRowFromString(string userChoiceRow)
         {
             int userChoiceRowInt = 0;
-            int userChoiceCharNum = 97;
+            int charNum = 97;
             for (int i = 0; i < 20; i++)
             {
-                char userChoiceChar = Convert.ToChar(userChoiceCharNum);
+                char userChoiceChar = Convert.ToChar(userChoiceRow);
 
-                if (Convert.ToChar(userChoiceRow) == userChoiceChar)
+                if (userChoiceChar == charNum)
                 {
                     userChoiceRowInt = i;
                     return userChoiceRowInt;
                 }
-                userChoiceCharNum++;
+                charNum++;
             }
             return userChoiceRowInt;
         }
@@ -153,6 +142,16 @@ namespace BattleshipGame
                 Console.WriteLine();
             }
             Console.ReadLine();
+        }
+
+        public void CreateShips()
+        {
+            sub = new Submarine();
+            bb = new Battleship();
+            cv = new Carrier();
+            dd = new Destroyer();
+
+            shipList = new List<Ship>() { sub, bb, cv, dd };
         }
     }
     

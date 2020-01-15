@@ -8,5 +8,9 @@ namespace BattleshipGame
 {
     class Human : Player
     {
+        public Human(string name)
+        {
+            this.name = name;
+        }
     }
 }

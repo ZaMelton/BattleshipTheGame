@@ -11,5 +11,6 @@ namespace BattleshipGame
         public int lengthOfShip;
         public string name;
         public string firstLetter;
+        public List<(int, int)> coordinates;
     }
 }

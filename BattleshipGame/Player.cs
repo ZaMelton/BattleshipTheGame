@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace BattleshipGame
 {
-    class Player
+    abstract class Player
     {
+        public string name;
+        public Board userBoard;
+        public Board targetBoard;
+
+        public void CreateBoards()
+        {
+            userBoard = new Board();
+            targetBoard = new Board();
+        }
     }
 }
