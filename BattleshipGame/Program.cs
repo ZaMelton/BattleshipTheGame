@@ -14,7 +14,6 @@ namespace BattleshipGame
 
             battleship.PlayGame();
             Console.ReadLine();
-
         }
     }
 }

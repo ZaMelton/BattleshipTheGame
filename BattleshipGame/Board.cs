@@ -35,100 +35,113 @@ namespace BattleshipGame
 
             foreach (Ship ship in shipList)
             {
-                Console.WriteLine($"Please choose a start point for your {ship.name}");
-                string userChoiceRow = Console.ReadLine();
-                Console.WriteLine($"Please choose column for your {ship.name}");
-                int userBoardChoiceColumn = Int32.Parse(Console.ReadLine());
+                ship.startPosition = ship.GetCoordinates();
 
-                int userChoiceRowInt = DetermineRowFromString(userChoiceRow);
+                string shipRow = ship.startPosition[0].ToString();
+                int shipRowInt = DetermineRowFromString(shipRow);
 
-                board[userChoiceRowInt, (userBoardChoiceColumn - 1)] = ship.firstLetter;
+                string shipColumn = ship.startPosition.Remove(0, 1);
+                int shipColumnInt = Int32.Parse(shipColumn);
 
+                //board[shipRowInt, (shipColumnInt - 1)] = ship.firstLetter;
 
-                Console.WriteLine("Do you want the ship to continue left, right, up or down of that position?");
-                string shipDirection = Console.ReadLine().ToLower();
+                ship.direction = ship.GetDirection();
+                PlaceShip(board, ship.direction, ship.firstLetter, ship.lengthOfShip, shipRowInt, shipColumnInt);
+                DisplayBoard();
 
-                if (shipDirection == "up")
-                {
-                    if (ship.lengthOfShip > (userChoiceRowInt + 1))
-                    {
-                        Console.WriteLine("You can't place continue your ship up from that position, please try another position.");
-                    }
-                    else
-                    {
-                        for (int i = 1; i < ship.lengthOfShip; i++)
-                        {
-                            board[(userChoiceRowInt - i), (userBoardChoiceColumn - 1)] = ship.firstLetter;
-                        }
-                        DisplayBoard();
-                    }
-                }
-                else if (shipDirection == "down")
-                {
-                    if (((userChoiceRowInt) + ship.lengthOfShip) > board.GetLength(0))
-                    {
-                        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
-                    }
-                    else
-                    {
-                        for (int i = 1; i < ship.lengthOfShip; i++)
-                        {
-                            board[(userChoiceRowInt + i), (userBoardChoiceColumn - 1)] = ship.firstLetter;
-                        }
-                        DisplayBoard();
-                    }
-                }
-                else if (shipDirection == "left")
-                {
-                    if (ship.lengthOfShip > (userBoardChoiceColumn))
-                    {
-                        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
-                    }
-                    else
-                    {
-                        for (int i = 1; i < ship.lengthOfShip; i++)
-                        {
-                            board[(userChoiceRowInt), (userBoardChoiceColumn - 1) - i] = ship.firstLetter;
-                        }
-                        DisplayBoard();
-                    }
+                //if (shipDirection == "up")
+                //{
+                //    if (ship.lengthOfShip > (shipRowInt + 1))
+                //    {
+                //        Console.WriteLine("You can't place continue your ship up from that position, please try another position.");
+                //    }
+                //    else
+                //    {
+                //        for (int i = 1; i < ship.lengthOfShip; i++)
+                //        {
+                //            board[(shipRowInt - i), (shipColumnInt - 1)] = ship.firstLetter;
+                //            //obtains ships end position
+                //            if (i == (ship.lengthOfShip - 1))
+                //            {
+                //                ship.endPosition = (Convert.ToChar(shipRowInt + 97)).ToString() + shipColumnInt.ToString();
+                //                Console.WriteLine( ship.endPosition);
+                //            }
+                //        }
+                //        DisplayBoard();
+                //    }
+                //}
+                //else if (shipDirection == "down")
+                //{
+                //    if (((shipRowInt) + ship.lengthOfShip) > board.GetLength(0))
+                //    {
+                //        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                //    }
+                //    else
+                //    {
+                //        for (int i = 1; i < ship.lengthOfShip; i++)
+                //        {
+                //            board[(shipRowInt + i), (shipColumnInt - 1)] = ship.firstLetter;
+                //            //obtains ships end position
+                //            if (i == (ship.lengthOfShip - 1))
+                //            {
+                //                ship.endPosition = (Convert.ToChar(shipRowInt + 97)).ToString() + shipColumnInt.ToString();
+                //                Console.WriteLine(ship.endPosition);
+                //            }
+                //        }
+                //        DisplayBoard();
+                //    }
+                //}
+                //else if (shipDirection == "left")
+                //{
+                //    if (ship.lengthOfShip > (shipColumnInt))
+                //    {
+                //        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                //    }
+                //    else
+                //    {
+                //        for (int i = 1; i < ship.lengthOfShip; i++)
+                //        {
+                //            board[(shipRowInt), (shipColumnInt - 1) - i] = ship.firstLetter;
+                //            //obtains ships end position
+                //            if (i == (ship.lengthOfShip - 1))
+                //            {
+                //                ship.endPosition = (Convert.ToChar(shipRowInt + 97)).ToString() + shipColumnInt.ToString();
+                //                Console.WriteLine(ship.endPosition);
+                //            }
+                //        }
+                //        DisplayBoard();
+                //    }
 
-                }
-                else if (shipDirection == "right")
-                {
-                    if (((userBoardChoiceColumn - 1) + ship.lengthOfShip) > board.GetLength(1))
-                    {
-                        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
-                    }
-                    else
-                    {
-                        for (int i = 1; i < ship.lengthOfShip; i++)
-                        {
-                            board[(userChoiceRowInt), (userBoardChoiceColumn - 1) + i] = ship.firstLetter;
-                        }
-                        DisplayBoard();
-                    }
-                }
+                //}
+                //else if (shipDirection == "right")
+                //{
+                //    if (((shipColumnInt - 1) + ship.lengthOfShip) > board.GetLength(1))
+                //    {
+                //        Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                //    }
+                //    else
+                //    {
+                //        for (int i = 1; i < ship.lengthOfShip; i++)
+                //        {
+                //            board[(shipRowInt), (shipColumnInt - 1) + i] = ship.firstLetter;
+                //            //obtains ships end position
+                //            if (i == (ship.lengthOfShip - 1))
+                //            {
+                //                ship.endPosition = (Convert.ToChar(shipRowInt + 97)).ToString() + shipColumnInt.ToString();
+                //                Console.WriteLine(ship.endPosition);
+                //            }
+                //        }
+                //        DisplayBoard();
+                //    }
             }
         }
+
 
         //Lets the user input a letter for the row and turns it into an int so it can be used to index the board array
         public int DetermineRowFromString(string userChoiceRow)
         {
-            int userChoiceRowInt = 0;
-            int charNum = 97;
-            for (int i = 0; i < 20; i++)
-            {
-                char userChoiceChar = Convert.ToChar(userChoiceRow);
-
-                if (userChoiceChar == charNum)
-                {
-                    userChoiceRowInt = i;
-                    return userChoiceRowInt;
-                }
-                charNum++;
-            }
-            return userChoiceRowInt;
+            int shipRowInt = Convert.ToChar(userChoiceRow) - 97;
+            return shipRowInt;
         }
 
         public void DisplayBoard()
@@ -153,6 +166,67 @@ namespace BattleshipGame
 
             shipList = new List<Ship>() { sub, bb, cv, dd };
         }
+
+        public void PlaceShip(string[,] board, string shipDirection, string firstLetter, int lengthOfShip, int shipRowInt, int shipColumnInt)
+        {
+            if (shipDirection == "up")
+            {
+                if (lengthOfShip > (shipRowInt + 1))
+                {
+                    Console.WriteLine("You can't place continue your ship up from that position, please try another position.");
+                }
+                else
+                {
+                    for (int i = 0; i < lengthOfShip; i++)
+                    {
+                        board[(shipRowInt - i), (shipColumnInt - 1)] = firstLetter;
+                    }
+                }
+            }
+            else if (shipDirection == "down")
+            {
+                if (((shipRowInt) + lengthOfShip) > board.GetLength(0))
+                {
+                    Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                }
+                else
+                {
+                    for (int i = 0; i < lengthOfShip; i++)
+                    {
+                        board[(shipRowInt + i), (shipColumnInt - 1)] = firstLetter;
+                    }
+                }
+            }
+            else if (shipDirection == "left")
+            {
+                if (lengthOfShip > (shipColumnInt))
+                {
+                    Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                }
+                else
+                {
+                    for (int i = 0; i < lengthOfShip; i++)
+                    {
+                        board[(shipRowInt), (shipColumnInt - 1) - i] = firstLetter;
+                    }
+                }
+
+            }
+            else if (shipDirection == "right")
+            {
+                if (((shipColumnInt - 0) + lengthOfShip) > board.GetLength(1))
+                {
+                    Console.WriteLine("You can't continue your ship up from that position, please try another position.");
+                }
+                else
+                {
+                    for (int i = 0; i < lengthOfShip; i++)
+                    {
+                        board[(shipRowInt), (shipColumnInt - 1) + i] = firstLetter;
+                    }
+                }
+            }
+        }
     }
-    
 }
+
