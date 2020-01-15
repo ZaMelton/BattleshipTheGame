@@ -26,8 +26,11 @@ namespace BattleshipGame
 
             Console.WriteLine($"{p1.name}, please where you would like to place your ships.");
             p1.userBoard.ChooseBoardShipPositions(p1.userBoard.board);
+            Console.Clear();
+
             Console.WriteLine($"{p2.name}, please where you would like to place your ships.");
             p2.userBoard.ChooseBoardShipPositions(p2.userBoard.board);
+            Console.Clear();
         }
     }
 }

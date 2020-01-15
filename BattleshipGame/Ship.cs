@@ -47,37 +47,72 @@ namespace BattleshipGame
             return startPosition;
         }
 
-        public string GetDirection()
+        public string GetDirection(int lengthOfShip, int shipRowInt, int shipColumnInt, string[,] board)
         {
             Console.WriteLine("Do you want the ship to continue left, right, up or down of that position?");
             string shipDirection = Console.ReadLine().ToLower();
 
-            return shipDirection;
+            bool validInput = false;
+            while (!validInput)
+            {
+                switch (shipDirection)
+                {
+                    case "up":
+                        validInput = true;
+                        break;
+                    case "down":
+                        validInput = true;
+                        break;
+                    case "left":
+                        validInput = true;
+                        break;
+                    case "right":
+                        validInput = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input. Please choose an appropriate direction..");
+                        shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                        break;
+                }
+            }
 
-            //bool validInput = false;
-            //while (validInput = false)
-            //{
-            //    switch (shipDirection)
-            //    {
-            //        case "up":
-            //            validInput = true;
-            //            return shipDirection;
-            //        case "down":
-            //            validInput = true;
-            //            return shipDirection;
-            //        case "left":
-            //            validInput = true;
-            //            return shipDirection;
-            //        case "right":
-            //            validInput = true;
-            //            return shipDirection;
-            //        default:
-            //            Console.WriteLine("Invalid input. Please choose an appropriate direction..");
-            //            shipDirection = Console.ReadLine().ToLower();
-            //            break;
-            //    }
-            //}
-            //return "error";
+            //Check for all out of bounds cases
+            if (shipDirection == "up")
+            {
+                while (lengthOfShip > (shipRowInt + 1))
+                {
+                    Console.WriteLine("Ship out of bounds at the top, please try another position.");
+                    return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                }
+            }
+
+            else if(shipDirection == "down")
+            {
+                while (((shipRowInt) + lengthOfShip) > board.GetLength(0))
+                {
+                    Console.WriteLine("Ship out of bounds at the bottom, please try another position.");
+                    return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                }
+            }
+
+            else if (shipDirection == "left")
+            {
+                while (lengthOfShip > shipColumnInt)
+                {
+                    Console.WriteLine("Ship out of bounds to the left, please try another position.");
+                    return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                }
+            }
+
+            else if(shipDirection == "right")
+            {
+                while ((shipColumnInt + lengthOfShip) > board.GetLength(1))
+                {
+                    Console.WriteLine("Ship out of bounds to the right, please try another position.");
+                    return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                }
+            }
+            return shipDirection;
         }
     }
 }
