@@ -31,19 +31,19 @@ namespace BattleshipGame
         public void ChooseBoardShipPositions(string[,] board)
         {
             CreateShips();
-
-            foreach (Ship ship in shipList)
+            for (int i = 0; i < shipList.Count; i++)
             {
-                ship.startPosition = ship.GetCoordinates();
+                shipList[i].startPosition = shipList[i].GetCoordinates();
 
-                string shipRow = ship.startPosition[0].ToString();
+                string shipRow = shipList[i].startPosition[0].ToString();
                 int shipRowInt = DetermineRowFromString(shipRow);
 
-                string shipColumn = ship.startPosition.Remove(0, 1);
+                string shipColumn = shipList[i].startPosition.Remove(0, 1);
                 int shipColumnInt = Int32.Parse(shipColumn);
 
-                ship.direction = ship.GetDirection(ship.lengthOfShip, shipRowInt, shipColumnInt, board);
-                PlaceShip(board, ship.direction, ship.firstLetter, ship.lengthOfShip, shipRowInt, shipColumnInt);
+                shipList[i].direction = shipList[i].GetDirection(shipList[i].lengthOfShip, shipRowInt, shipColumnInt, board);
+                PlaceShip(board, shipList[i].direction, shipList[i].firstLetter, shipList[i].lengthOfShip, shipRowInt, shipColumnInt);
+                Console.WriteLine(shipList[i].coordinates);
                 DisplayBoard();
             }
         }

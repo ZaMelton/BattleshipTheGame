@@ -14,7 +14,7 @@ namespace BattleshipGame
         public string direction;
         public string startPosition;
         public string endPosition;
-        public List<(int, int)> coordinates;
+        public List<string> coordinates;
 
         public string GetCoordinates()
         {
@@ -43,7 +43,6 @@ namespace BattleshipGame
                 Console.WriteLine("Not a valid input.");
                 startPosition = GetCoordinates();
             }
-
             return startPosition;
         }
 
@@ -76,13 +75,23 @@ namespace BattleshipGame
                 }
             }
 
-            //Check for all out of bounds cases
+            //Check for all out of bounds cases and collisions
             if (shipDirection == "up")
             {
+                //out of bounds up
                 while (lengthOfShip > (shipRowInt + 1))
                 {
-                    Console.WriteLine("Ship out of bounds at the top, please try another position.");
+                    Console.WriteLine("Ship out of bounds at the top, please try another direction.");
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                }
+                //check for collision with other ship for the case of up
+                for (int i = 0; i < lengthOfShip; i++)
+                {
+                    if(board[(shipRowInt - i), (shipColumnInt - 1)] != " ")
+                    {
+                        Console.WriteLine("That location will cause a ship collision. Please select another direction.");
+                        return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                    }
                 }
             }
 
@@ -90,8 +99,17 @@ namespace BattleshipGame
             {
                 while (((shipRowInt) + lengthOfShip) > board.GetLength(0))
                 {
-                    Console.WriteLine("Ship out of bounds at the bottom, please try another position.");
+                    Console.WriteLine("Ship out of bounds at the bottom, please try another direction.");
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                }
+                //check for collision for the case of down
+                for (int i = 0; i < lengthOfShip; i++)
+                {
+                    if(board[(shipRowInt + i), (shipColumnInt - 1)] != " ")
+                    {
+                        Console.WriteLine("That location will cause a ship collision. Please select another direction.");
+                        return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                    }
                 }
             }
 
@@ -102,6 +120,15 @@ namespace BattleshipGame
                     Console.WriteLine("Ship out of bounds to the left, please try another position.");
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
                 }
+                //check for collision for the case of left
+                for (int i = 0; i < lengthOfShip; i++)
+                {
+                    if(board[(shipRowInt), (shipColumnInt - 1) - i] != " ")
+                    {
+                        Console.WriteLine("That location will cause a ship collision. Please select another direction.");
+                        return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                    }
+                }
             }
 
             else if(shipDirection == "right")
@@ -110,6 +137,15 @@ namespace BattleshipGame
                 {
                     Console.WriteLine("Ship out of bounds to the right, please try another position.");
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                }
+                //check for collision for the case of right
+                for (int i = 0; i < lengthOfShip; i++)
+                {
+                    if(board[(shipRowInt), (shipColumnInt - 1) + i] != " ")
+                    {
+                        Console.WriteLine("That location will cause a ship collision. Please select another direction.");
+                        return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board);
+                    }
                 }
             }
             return shipDirection;
