@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace BattleshipGame
 {
-    class Carrier : Ship
+    class Cruiser : Ship
     {
-        
-        public Carrier()
+        public Cruiser()
         {
-            lengthOfShip = 5;
-            name = "Aircraft Carrier";
-            firstLetter = "A";
+            lengthOfShip = 3;
+            name = "Cruiser";
+            firstLetter = "C";
         }
     }
 }

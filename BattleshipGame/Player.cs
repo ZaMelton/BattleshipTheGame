@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BattleshipGame
 {
-    abstract class Player
+    class Player
     {
         public string name;
         public Board userBoard;
@@ -26,9 +26,10 @@ namespace BattleshipGame
             Submarine sub = new Submarine();
             Battleship bb = new Battleship();
             Carrier cv = new Carrier();
+            Cruiser cl = new Cruiser();
             Destroyer dd = new Destroyer();
 
-            shipList = new List<Ship>() { sub, bb, cv, dd };
+            shipList = new List<Ship>() { sub, bb, cv, cl, dd };
         }
 
         public void ChooseBoardShipPositions(string[,] boardSpots)
@@ -45,16 +46,17 @@ namespace BattleshipGame
 
                 shipList[i].direction = shipList[i].GetDirection(shipList[i].lengthOfShip, shipRowInt, shipColumnInt, userBoard, boardSpots);
                 PlaceShip(boardSpots, shipList[i].direction, shipList[i].firstLetter, shipList[i].lengthOfShip, shipRowInt, shipColumnInt);
+                userBoard.DisplayBoard();
             }
         }
 
-        public void PlaceShip(string[,] board, string shipDirection, string firstLetter, int lengthOfShip, int shipRowInt, int shipColumnInt)
+        public void PlaceShip(string[,] boardSpots, string shipDirection, string firstLetter, int lengthOfShip, int shipRowInt, int shipColumnInt)
         {
             if (shipDirection == "up")
             {
                 for (int i = 0; i < lengthOfShip; i++)
                 {
-                    board[(shipRowInt - i), (shipColumnInt - 1)] = firstLetter;
+                    boardSpots[(shipRowInt - i), (shipColumnInt - 1)] = firstLetter;
                 }
             }
 
@@ -62,7 +64,7 @@ namespace BattleshipGame
             {
                 for (int i = 0; i < lengthOfShip; i++)
                 {
-                    board[(shipRowInt + i), (shipColumnInt - 1)] = firstLetter;
+                    boardSpots[(shipRowInt + i), (shipColumnInt - 1)] = firstLetter;
                 }
             }
 
@@ -70,7 +72,7 @@ namespace BattleshipGame
             {
                 for (int i = 0; i < lengthOfShip; i++)
                 {
-                    board[(shipRowInt), (shipColumnInt - 1) - i] = firstLetter;
+                    boardSpots[(shipRowInt), (shipColumnInt - 1) - i] = firstLetter;
                 }
             }
 
@@ -78,12 +80,12 @@ namespace BattleshipGame
             {
                 for (int i = 0; i < lengthOfShip; i++)
                 {
-                    board[(shipRowInt), (shipColumnInt - 1) + i] = firstLetter;
+                    boardSpots[(shipRowInt), (shipColumnInt - 1) + i] = firstLetter;
                 }
             }
         }
 
-        public void ChooseAttackPosition(Player player, Board enemyBoard, Board targetBoard)
+        public void AttackPosition(Player player, Board enemyBoard, Board targetBoard)
         {
             string positionToAttack = enemyBoard.GetAndCheckAttackCoordinates(enemyBoard.boardSpots, enemyBoard, player);
 
@@ -108,22 +110,5 @@ namespace BattleshipGame
                 targetBoard.boardSpots[shipRowInt, (shipColumnInt - 1)] = "0";
             }
         }
-
-        //public void AttackEnemy(Board enemyBoard, Board targetBoard, int shipRowInt, int shipColumnInt, List<Ship> shipList)
-        //{
-        //    Console.WriteLine($"{name}, you are attacking this position {enemyBoard.boardSpots[shipRowInt, shipColumnInt]}");
-
-        //    if(enemyBoard.boardSpots[shipRowInt, shipColumnInt] != " ")
-        //    {
-        //        Console.WriteLine("It was a hit!");
-        //        targetBoard.boardSpots[shipRowInt, shipColumnInt] = "X";
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("It was a miss!");
-        //        targetBoard.boardSpots[shipRowInt, shipColumnInt] = "X";
-        //    }
-        //}
-
     }
 }

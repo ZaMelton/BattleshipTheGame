@@ -10,8 +10,6 @@ namespace BattleshipGame
         public string direction;
         public string startPosition;
         public int failedAttempts;
-        //public string endPosition;
-        //public List<string> coordinates;
 
         public string GetCoordinates(string[,] boardSpots, Board board)
         {
@@ -21,13 +19,13 @@ namespace BattleshipGame
             if (startPosition.Length > 3 || startPosition.Length < 2)
             {
                 Console.WriteLine("Not a valid input.");
-                startPosition = GetCoordinates(boardSpots, board);
+                return startPosition = GetCoordinates(boardSpots, board);
             }
 
             if (startPosition[0] < 97 || startPosition[0] > 116)
             {
                 Console.WriteLine("Not a valid input.");
-                startPosition = GetCoordinates(boardSpots, board);
+                return startPosition = GetCoordinates(boardSpots, board);
             }
 
             string column = startPosition.Remove(0, 1);
@@ -37,23 +35,24 @@ namespace BattleshipGame
                 columnInt = Int32.Parse(column);
                 if(columnInt < 1 || columnInt > 20)
                 {
-                    startPosition = GetCoordinates(boardSpots, board);
+                    Console.WriteLine("Not a valid input.");
+                    return startPosition = GetCoordinates(boardSpots, board);
                 }
             }
             catch (Exception)
             {
                 Console.WriteLine("Not a valid input.");
-                startPosition = GetCoordinates(boardSpots, board);
+                return startPosition = GetCoordinates(boardSpots, board);
             }
 
-            //int row = board.DetermineRowFromString(startPosition[0].ToString());
-            //columnInt = Int32.Parse(column);
-            //if (boardSpots[row, (columnInt - 1)] != " ")
-            //{
-            //    Console.WriteLine("There is already a ship at that position.");
-            //    startPosition = GetCoordinates(boardSpots, board);
-            //}
-
+            int row = board.DetermineRowFromString(startPosition[0].ToString());
+            columnInt = Int32.Parse(column);
+            if (boardSpots[row, (columnInt - 1)] != " ")
+            {
+                Console.WriteLine("There is already a ship at that position.");
+                return startPosition = GetCoordinates(boardSpots, board);
+            }
+ 
             return startPosition;
         }
 
@@ -65,9 +64,10 @@ namespace BattleshipGame
                 failedAttempts = 0;
                 //return GetCoordinates(boardSpots, board);
                 string failed = "Sorry, you failed. You don't get one of your ships..";//fixing this problem later
-                Console.WriteLine(failed);
+                Console.WriteLine($"\n{failed}");
                 return "failed";
             }
+
             Console.WriteLine("Do you want the ship to continue left, right, up or down of that position?");
             string shipDirection = Console.ReadLine().ToLower();
 
@@ -99,6 +99,7 @@ namespace BattleshipGame
                 while (lengthOfShip > (shipRowInt + 1))
                 {
                     Console.WriteLine("Ship out of bounds at the top, please try another direction.");
+                    failedAttempts++;
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board, boardSpots);
                 }
                 //check for collision with other ship for the case of up
@@ -118,6 +119,7 @@ namespace BattleshipGame
                 while (((shipRowInt) + lengthOfShip) > boardSpots.GetLength(0))
                 {
                     Console.WriteLine("Ship out of bounds at the bottom, please try another direction.");
+                    failedAttempts++;
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board, boardSpots);
                 }
                 //check for collision for the case of down
@@ -137,6 +139,7 @@ namespace BattleshipGame
                 while (lengthOfShip > shipColumnInt)
                 {
                     Console.WriteLine("Ship out of bounds to the left, please try another position.");
+                    failedAttempts++;
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board, boardSpots);
                 }
                 //check for collision for the case of left
@@ -156,6 +159,7 @@ namespace BattleshipGame
                 while ((shipColumnInt + lengthOfShip) > boardSpots.GetLength(1))
                 {
                     Console.WriteLine("Ship out of bounds to the right, please try another position.");
+                    failedAttempts++;
                     return shipDirection = GetDirection(lengthOfShip, shipRowInt, shipColumnInt, board, boardSpots);
                 }
                 //check for collision for the case of right
@@ -173,4 +177,3 @@ namespace BattleshipGame
         }
     }
 }
-
