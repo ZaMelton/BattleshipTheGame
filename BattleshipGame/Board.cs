@@ -8,48 +8,21 @@ namespace BattleshipGame
 {
     class Board
     {
-        public string[,] board;
-        public List<Ship> shipList;
-        public Submarine sub;
-        public Battleship bb;
-        public Carrier cv;
-        public Destroyer dd;
+        public string[,] boardSpots;
 
         public Board()
         {
-            board = new string[20, 20];
+            boardSpots = new string[20, 20];
 
-            for (int i = 0; i < board.GetLength(0); i++)
+            for (int i = 0; i < boardSpots.GetLength(0); i++)
             {
-                for (int j = 0; j < board.GetLength(1); j++)
+                for (int j = 0; j < boardSpots.GetLength(1); j++)
                 {
-                    board[i, j] = " ";
+                    boardSpots[i, j] = " ";
                 }
             }
         }
 
-        public void ChooseBoardShipPositions(string[,] board)
-        {
-            CreateShips();
-            for (int i = 0; i < shipList.Count; i++)
-            {
-                shipList[i].startPosition = shipList[i].GetCoordinates();
-
-                string shipRow = shipList[i].startPosition[0].ToString();
-                int shipRowInt = DetermineRowFromString(shipRow);
-
-                string shipColumn = shipList[i].startPosition.Remove(0, 1);
-                int shipColumnInt = Int32.Parse(shipColumn);
-
-                shipList[i].direction = shipList[i].GetDirection(shipList[i].lengthOfShip, shipRowInt, shipColumnInt, board);
-                PlaceShip(board, shipList[i].direction, shipList[i].firstLetter, shipList[i].lengthOfShip, shipRowInt, shipColumnInt);
-                Console.WriteLine(shipList[i].coordinates);
-                DisplayBoard();
-            }
-        }
-
-
-        //Lets the user input a letter for the row and turns it into an int so it can be used to index the board array
         public int DetermineRowFromString(string userChoiceRow)
         {
             int shipRowInt = Convert.ToChar(userChoiceRow) - 97;
@@ -58,61 +31,49 @@ namespace BattleshipGame
 
         public void DisplayBoard()
         {
-            for (int i = 0; i < board.GetLength(0); i++)
+            for (int i = 0; i < boardSpots.GetLength(0); i++)
             {
-                for (int j = 0; j < board.GetLength(1); j++)
+                for (int j = 0; j < boardSpots.GetLength(0); j++)
                 {
-                    Console.Write($"[{board[i, j]}]");
+                    Console.Write($"[{boardSpots[i, j]}]");
                 }
                 Console.WriteLine();
             }
             Console.ReadLine();
         }
 
-        public void CreateShips()
+        public string GetAndCheckAttackCoordinates(string[,] boardSpots, Board board, Player player)
         {
-            sub = new Submarine();
-            bb = new Battleship();
-            cv = new Carrier();
-            dd = new Destroyer();
+            Console.WriteLine($"{player.name}, please choose a position to attack (Example: A15)");
+            string attackPosition = Console.ReadLine().ToLower();
 
-            shipList = new List<Ship>() { sub, bb, cv, dd };
+            if (attackPosition.Length > 3 || attackPosition.Length < 2)
+            {
+                Console.WriteLine("Not a valid input.");
+                attackPosition = GetAndCheckAttackCoordinates(boardSpots, board, player);
+            }
+
+            if (attackPosition[0] < 97 || attackPosition[0] > 116)
+            {
+                Console.WriteLine("Not a valid input.");
+                attackPosition = GetAndCheckAttackCoordinates(boardSpots, board, player);
+            }
+
+            string column = attackPosition.Remove(0, 1);
+            int columnInt;
+            try
+            {
+                columnInt = Int32.Parse(column);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Not a valid input.");
+                attackPosition = GetAndCheckAttackCoordinates(boardSpots, board, player);
+            }
+
+            return attackPosition;
         }
 
-        public void PlaceShip(string[,] board, string shipDirection, string firstLetter, int lengthOfShip, int shipRowInt, int shipColumnInt)
-        {
-            if (shipDirection == "up")
-            {
-                for (int i = 0; i < lengthOfShip; i++)
-                {
-                    board[(shipRowInt - i), (shipColumnInt - 1)] = firstLetter;
-                }
-            }
-
-            if (shipDirection == "down")
-            {
-                for (int i = 0; i < lengthOfShip; i++)
-                {
-                    board[(shipRowInt + i), (shipColumnInt - 1)] = firstLetter;
-                }
-            }
-
-            if (shipDirection == "left")
-            {
-                for (int i = 0; i < lengthOfShip; i++)
-                {
-                    board[(shipRowInt), (shipColumnInt - 1) - i] = firstLetter;
-                }
-            }
-
-            if (shipDirection == "right")
-            {
-                for (int i = 0; i < lengthOfShip; i++)
-                {
-                    board[(shipRowInt), (shipColumnInt - 1) + i] = firstLetter;
-                }
-            }
-        }
     }
 }
 
